@@ -1,4 +1,4 @@
-"""Question 1 understanding dataset"""
+"""Q1 - loading and understanding the dataset"""
 
 agri_data = pd.read_csv('/content/agriculture_ml_dataset_cw.csv')
 
@@ -10,7 +10,7 @@ agri_data.info()
 print("first 10 records:")
 print(agri_data.head(10))
 
-"""Question 2 data types and missing values"""
+"""Q2 - checking data types and null values"""
 
 agri_data.info()
 
@@ -20,7 +20,7 @@ missing = agri_data.isnull().sum()
 print("columns with missing values:")
 print(missing[missing > 0])
 
-"""Question 3 descriptive statistics"""
+"""Q3 - summary statistics for numerical features"""
 
 num_cols = ['Rainfall', 'Temperature', 'Humidity', 'Nitrogen', 'Yield']
 for col in num_cols:
@@ -39,9 +39,9 @@ print("std value:", std_vals.max())
 mean_vals = agri_data.mean(numeric_only=True)
 print("highest mean column:", mean_vals.idxmax())
 
-"""PART B Exploratory data analysis"""
+"""PART B - EDA"""
 
-"""Question 4 distribution analysis"""
+"""Q4 - plotting histograms for key features"""
 
 !pip install plotly matplotlib seaborn --quiet
 import plotly.express as px
@@ -65,7 +65,7 @@ px.histogram(agri_data, x='Fertilizer', title='Fertilizer (kg)')
 
 px.histogram(agri_data, x='Yield', title='Yield (ton per hectare)')
 
-"""Question 5 crop type analysis"""
+"""Q5 - analysing crop type frequency"""
 
 crop_counts = agri_data['Crop_Type'].value_counts()
 print(crop_counts)
@@ -83,7 +83,7 @@ fig.show()
 print("Most frequent crop:", agri_data['Crop_Type'].value_counts().idxmax())
 print("Count:", agri_data['Crop_Type'].value_counts().max())
 
-"""Q6. Soil Type Analysis"""
+"""Q6 - analysing soil type frequency"""
 
 soil_counts = agri_data['Soil_Type'].value_counts()
 print(soil_counts)
@@ -93,14 +93,14 @@ fig.show()
 
 print("Most common soil type:", agri_data['Soil_Type'].mode()[0])
 
-"""Q7. Yield Distribution"""
+"""Q7 - yield distribution and checking for outliers"""
 
 fig = px.histogram(agri_data, x='Yield', nbins=20, title='Yield Distribution')
 fig.show()
 
-"""the distribution is bell shaped so yield is approximately normal, values are concentrated around the mean with no major outliers visible
+"""graph is bell shaped so yield follows approximately normal distribution, values are mostly around the mean and no major outliers are visible
 
-Q8. Scatter Plot Analysis
+Q8 - scatter plots to check relationship with yield
 """
 
 fig = px.scatter(
@@ -123,7 +123,7 @@ print(agri_data[['Fertilizer', 'Yield']].isnull().sum())
 
 print(agri_data[['Fertilizer', 'Yield']].dropna().corr())
 
-"""Q9. Correlation Analysis"""
+"""Q9 - correlation matrix and heatmap"""
 
 corr_matrix = agri_data.corr(numeric_only=True)
 print(corr_matrix)
@@ -140,7 +140,7 @@ top3 = yield_corr.drop('Yield').head(3)
 print("Top 3 features correlated with Yield:")
 print(top3)
 
-"""Q10. Group-Based Analysis"""
+"""Q10 - average yield by crop and soil type"""
 
 crop_avg = agri_data.groupby('Crop_Type')['Yield'].mean()
 print(crop_avg)
@@ -154,8 +154,8 @@ print("Average yield:", crop_avg.max())
 print("Soil with highest average yield:", soil_avg.idxmax())
 print("Average yield:", soil_avg.max())
 
-"""Part C: Data Preparation
-Q11. Feature Encoding
+"""Part C - Data Preparation
+Q11 - encoding categorical columns using one hot encoding
 """
 
 categorical_cols = agri_data.select_dtypes(include='object').columns
@@ -165,7 +165,7 @@ agri_encoded = pd.get_dummies(agri_data, columns=categorical_cols, drop_first=Tr
 print(agri_encoded.head())
 print(agri_encoded.shape)
 
-"""Q12. Feature Selection"""
+"""Q12 - separating input features and target variable"""
 
 X = agri_encoded.drop('Yield', axis=1)
 y = agri_encoded['Yield']
@@ -173,8 +173,8 @@ y = agri_encoded['Yield']
 print("X shape:", X.shape)
 print("y shape:", y.shape)
 
-"""Part D: Machine Learning
-Q13. Train-Test Split
+"""Part D - Machine Learning
+Q13 - splitting data into train and test sets
 """
 
 from sklearn.model_selection import train_test_split
@@ -186,7 +186,7 @@ print("X_test shape:", X_test.shape)
 print("y_train shape:", y_train.shape)
 print("y_test shape:", y_test.shape)
 
-"""Q14. Linear Regression Model"""
+"""Q14 - training linear regression and checking coefficients"""
 
 from sklearn.linear_model import LinearRegression
 
